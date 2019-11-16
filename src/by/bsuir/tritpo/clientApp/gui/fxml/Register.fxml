@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #2E3348;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="by.bsuir.tritpo.clientApp.gui.control.RegisterControl">
+    <center>
+        <GridPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="800.0" style="-fx-background-color: #fafafa;" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="199.2" minWidth="0.0" prefWidth="151.2" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="420.80003662109374" minWidth="10.0" prefWidth="389.6000244140625" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="184.00000000000006" minWidth="10.0" prefWidth="106.39997558593757" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="120.0" minHeight="10.0" prefHeight="112.80001831054688" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="103.0" minHeight="0.0" prefHeight="7.199987792968756" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="156.80003967285157" minHeight="0.0" prefHeight="64.80001220703124" valignment="BOTTOM" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="147.60003356933595" minHeight="0.0" prefHeight="90.80001831054688" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="162.40000000000003" minHeight="10.0" prefHeight="53.59996337890624" valignment="TOP" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="143.2000244140625" minHeight="0.0" prefHeight="106.99998779296874" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="140.6000366210938" minHeight="10.0" prefHeight="102.2000122070313" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <TextField fx:id="replyPasswordTextField" prefHeight="40.0" prefWidth="238.0" promptText="Повторите пароль" style="-fx-background-color: #fafafa; -fx-border-color: silver; -fx-border-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <Label prefHeight="46.0" prefWidth="219.0" text="Регистрация" textFill="#000000b8" GridPane.columnIndex="1">
+                    <font>
+                        <Font name="Lobster" size="36.0" />
+                    </font>
+                </Label>
+                <Button fx:id="createAccountButton" mnemonicParsing="false" style="-fx-background-color: #CBB700;" text="Создать аккаунт" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                    <font>
+                        <Font name="Lobster" size="18.0" />
+                    </font>
+                </Button>
+                <TextField fx:id="loginTextField" prefHeight="40.0" prefWidth="238.0" promptText="Логин" style="-fx-background-color: #fafafa; -fx-border-color: silver; -fx-border-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="passwordTextField" prefHeight="40.0" prefWidth="238.0" promptText="Пароль" style="-fx-background-color: #fafafa; -fx-border-color: silver; -fx-border-radius: 5;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="errorLabel" prefHeight="206.0" prefWidth="142.0" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="3" />
+            </children>
+        </GridPane>
+    </center>
+   <top>
+      <GridPane prefHeight="58.0" prefWidth="803.0" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label prefHeight="60.0" prefWidth="218.0" text="AstreyMSG" GridPane.columnIndex="1">
+               <font>
+                  <Font name="Lobster" size="48.0" />
+               </font>
+               <textFill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop color="#f9f9f959" />
+                        <Stop color="WHITE" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+            </Label>
+            <Button fx:id="backButton" mnemonicParsing="false" style="-fx-background-color: #CBB700;" text="Назад" GridPane.columnIndex="2">
+               <GridPane.margin>
+                  <Insets right="15.0" />
+               </GridPane.margin>
+               <font>
+                  <Font name="Lobster" size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </GridPane>
+   </top>
+</BorderPane>
