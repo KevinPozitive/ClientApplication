@@ -11,24 +11,33 @@ public class ServerInteractorImpl implements IServerInteractor {
     private BufferedWriter out;
     private BufferedReader in;
 
-
     public ServerInteractorImpl(Socket socket) throws IOException {
         this.socket = socket;
-        out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        System.out.println(socket);
+        out = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
+        in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        System.out.println(in);
+        System.out.println(out);
     }
 
     @Override
     public void sendMessage(String message) throws IOException {
-        out.write("msg~"+message);
+        out.write("msg~"+ message + "\n");
+        out.flush();
+    }
+
+    @Override
+    public void exit() throws IOException {
+        out.write("exit" + "\n");
         out.flush();
     }
 
     @Override
     public boolean registration(String login, String password) throws IOException {
-        out.write("reg~"+login+"~"+password);
+        out.write("reg~"+login+"~"+password + "\n");
         out.flush();
-        if(in.readLine()=="true"){
+        String str = in.readLine();
+        if(str.equals("true")){
             return true;
         }
         return false;
@@ -36,9 +45,10 @@ public class ServerInteractorImpl implements IServerInteractor {
 
     @Override
     public boolean login(String login, String password) throws IOException {
-        out.write("log~"+login+"~"+password);
+        out.write("log~"+login+"~"+password+"\n");
         out.flush();
-        if(in.readLine()=="true"){
+        String str = in.readLine();
+        if(str.equals("true")){
             return true;
         }
         return false;
@@ -46,19 +56,20 @@ public class ServerInteractorImpl implements IServerInteractor {
 
 
 
+//////////////////////////Next methods need start at new thread
+    ///////////////we will need to know what kind of message we get
+
     @Override
-    public String receiveMessage () throws IOException {
-        String msg = "";
-        msg = in.readLine();
-        msg.replace("~"," ");
-        return msg;
+    public String receiveMessage (String message) throws IOException {
+        message.replace("~"," ");
+        return message;
     }
 
     @Override
-    public LinkedList<String> receiveNames() throws IOException {
-        String[] msg = in.readLine().split("~");
+    public LinkedList<String> receiveNames(String message) throws IOException {
+        String msg[] = message.split("~");
         LinkedList<String> names = new LinkedList<>();
-        for(int i = 0;msg.length<i;i++){
+        for(int i = 0;msg.length < i;i++){
             names.add(msg[i]);
         }
        return names;

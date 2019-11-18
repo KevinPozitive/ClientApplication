@@ -1,5 +1,6 @@
 package by.bsuir.tritpo.clientApp.main;
 
+import by.bsuir.tritpo.clientApp.gui.control.Control;
 import by.bsuir.tritpo.clientApp.logic.impl.ServerInteractorImpl;
 
 import java.io.BufferedReader;
@@ -13,10 +14,12 @@ public class ClientConnect {
     private BufferedReader in;
     private BufferedWriter out;
 
-    public ClientConnect(String addr,int port){
+
+    public ClientConnect(String addr, int port){
         try {
             this.socket = new Socket(addr,port);
             ServerInteractorImpl sI = new ServerInteractorImpl(socket);
+            new Control(sI);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
