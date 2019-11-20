@@ -58,6 +58,7 @@ public class ChatControl extends Control{
                 }
             }
         });
+        Control.serverInteractor.startConversation();
         exitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -73,13 +74,12 @@ public class ChatControl extends Control{
                 }
             }
         });
-
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true){
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

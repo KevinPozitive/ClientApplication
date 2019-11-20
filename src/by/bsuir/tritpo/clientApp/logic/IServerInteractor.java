@@ -13,4 +13,5 @@ public interface IServerInteractor {
     String receiveMessage(String message) throws IOException;
     LinkedList<String> receiveNames(String names) throws IOException;
     List<String> getMessages() throws IOException;
+    void startConversation();
 }

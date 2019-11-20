@@ -29,14 +29,21 @@ public class ServerInteractorImpl implements IServerInteractor {
             @Override
             public void run() {
                 try {
-                    out.write("msgHistory~"+index);
+                    out.write("msgHistory~"+index+"\n");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    out.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 while (true) {
                     String msg;
                     try {
+                        System.out.println("run");
                         msg = in.readLine();
+                        System.out.println(msg);
                         String[] message = msg.split("~");
                         switch (message[0]){
                             case "msgHistory":
@@ -45,12 +52,19 @@ public class ServerInteractorImpl implements IServerInteractor {
                                 for(int i = 1; i < message.length; i++){
                                         result.add(message[i]);
                                 }
-                                thread.wait();
-                                out.write("msgHistory~"+index);
+                                try{
+                                    synchronized (thread){
+                                        thread.wait();
+                                    }
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                out.write("msgHistory~"+index+"\n");
+                                out.flush();
                                 break;
                             case "users":
                         }
-                    } catch (IOException | InterruptedException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -95,6 +109,7 @@ public class ServerInteractorImpl implements IServerInteractor {
 
     public void startConversation(){
         if(!thread.isAlive()) {
+            System.out.println("OMG");
             thread.start();
         }
     }
@@ -105,9 +120,17 @@ public class ServerInteractorImpl implements IServerInteractor {
     }
 
     public List<String> getMessages(){
-        while (thread.getState() != Thread.State.WAITING);
+        while (thread.getState() != Thread.State.WAITING){
+           // System.out.println("work");
+        }
         List retVal = result;
-        thread.notify();
+        try{
+            synchronized (thread){
+                thread.notify();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return retVal;
     }
 
