@@ -14,6 +14,7 @@ public class ServerInteractorImpl implements IServerInteractor {
     private BufferedWriter out;
     private BufferedReader in;
     private List<String> result;
+    private List<String> onlineUsers;
     private Thread thread;
     private int index = 0;
 
@@ -30,10 +31,6 @@ public class ServerInteractorImpl implements IServerInteractor {
             public void run() {
                 try {
                     out.write("msgHistory~"+index+"\n");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try {
                     out.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -41,7 +38,6 @@ public class ServerInteractorImpl implements IServerInteractor {
                 while (true) {
                     String msg;
                     try {
-                        System.out.println("run");
                         msg = in.readLine();
                         System.out.println(msg);
                         String[] message = msg.split("~");
@@ -62,7 +58,7 @@ public class ServerInteractorImpl implements IServerInteractor {
                                 out.write("msgHistory~"+index+"\n");
                                 out.flush();
                                 break;
-                            case "users":
+                            case "onlUsers":
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -113,6 +109,12 @@ public class ServerInteractorImpl implements IServerInteractor {
             thread.start();
         }
     }
+
+    @Override
+    public List<String> getOnlineUsers() {
+        return null;
+    }
+
     public void endConversation() throws IOException {
         if(thread.isAlive()) {
             thread.interrupt();
@@ -132,27 +134,5 @@ public class ServerInteractorImpl implements IServerInteractor {
             e.printStackTrace();
         }
         return retVal;
-    }
-
-
-
-
-//////////////////////////Next methods need start at new thread
-    ///////////////we will need to know what kind of message we get
-
-    @Override
-    public String receiveMessage (String message) throws IOException {
-        message.replace("~"," ");
-        return message;
-    }
-
-    @Override
-    public LinkedList<String> receiveNames(String message) throws IOException {
-        String msg[] = message.split("~");
-        LinkedList<String> names = new LinkedList<>();
-        for(int i = 0;msg.length < i;i++){
-            names.add(msg[i]);
-        }
-       return names;
     }
 }

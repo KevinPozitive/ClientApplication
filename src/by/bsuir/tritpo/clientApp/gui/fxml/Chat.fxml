@@ -70,12 +70,14 @@
             <RowConstraints maxHeight="175.5999999999999" minHeight="4.199987792968727" prefHeight="18.80006713867192" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ListView fx:id="listView" prefHeight="476.0" prefWidth="184.0" GridPane.rowIndex="1" GridPane.rowSpan="5">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </ListView>
-            <Label prefHeight="38.0" prefWidth="121.0" text="Online users">
+<!--            <ListView fx:id="listView" prefHeight="476.0" prefWidth="184.0" GridPane.rowIndex="1" GridPane.rowSpan="5">-->
+<!--               <opaqueInsets>-->
+<!--                  <Insets />-->
+<!--               </opaqueInsets>-->
+<!--            </ListView>-->
+             <TextArea fx:id="listView" editable="false" prefHeight="476.0" prefWidth="184.0"  GridPane.rowIndex="1" GridPane.rowSpan="5" />
+
+             <Label prefHeight="38.0" prefWidth="121.0" text="Online users">
                <font>
                   <Font name="Lobster" size="24.0" />
                </font>

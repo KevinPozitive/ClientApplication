@@ -10,8 +10,7 @@ public interface IServerInteractor {
     void exit() throws IOException;
     boolean registration(String login, String password) throws IOException;
     boolean login(String login, String password) throws IOException;
-    String receiveMessage(String message) throws IOException;
-    LinkedList<String> receiveNames(String names) throws IOException;
     List<String> getMessages() throws IOException;
     void startConversation();
+    List<String> getOnlineUsers();
 }

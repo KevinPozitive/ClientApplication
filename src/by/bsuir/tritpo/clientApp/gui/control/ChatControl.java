@@ -2,11 +2,10 @@ package by.bsuir.tritpo.clientApp.gui.control;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import by.bsuir.tritpo.clientApp.logic.impl.ServerInteractorImpl;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -31,7 +30,7 @@ public class ChatControl extends Control{
     private Button exitButton;
 
     @FXML
-    private ListView<?> listView;
+    private TextArea listView;
 
     @FXML
     private TextField textField;
@@ -79,19 +78,24 @@ public class ChatControl extends Control{
             public void run() {
                 while (true){
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    List<String> list = null;
+                    List<String> msg = null;
+                    List<String> users = null;
                     try {
-                        list = serverInteractor.getMessages();
+                        msg = serverInteractor.getMessages();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    for(String message:list){
+                    for(String message:msg){
                         showArea.appendText(message+"\n");
                     }
+//                    for(String user:users){
+//                        System.out.println(user);
+//                        //listView.appendText(user+"\n");
+//                    }
 
                 }
             }
