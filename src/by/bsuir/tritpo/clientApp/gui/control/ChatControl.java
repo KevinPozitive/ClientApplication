@@ -3,8 +3,10 @@ package by.bsuir.tritpo.clientApp.gui.control;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import by.bsuir.tritpo.clientApp.logic.impl.ServerInteractorImpl;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,6 +18,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class ChatControl extends Control{
+    Thread thread;
 
     @FXML
     private ResourceBundle resources;
@@ -40,7 +43,7 @@ public class ChatControl extends Control{
     private Button sendButton;
 
     @FXML
-    void initialize() throws IOException {
+    void initialize() throws IOException, InterruptedException {
        // showHistory();
         sendButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -48,6 +51,7 @@ public class ChatControl extends Control{
                 try {
                     if(!textField.getText().equals("")) {
                         Control.serverInteractor.sendMessage(textField.getText());
+                        textField.clear();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -59,22 +63,39 @@ public class ChatControl extends Control{
             public void handle(ActionEvent event) {
                 try {
                     Control.serverInteractor.exit();
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("../fxml/Login.fxml"));
+                    loader.load();
+                    Parent root = loader.getRoot();
+                    exitButton.getScene().setRoot(root);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
 
-    }
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    List<String> list = null;
+                    try {
+                        list = serverInteractor.getMessages();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    for(String message:list){
+                        showArea.appendText(message+"\n");
+                    }
 
-
-    public void showHistory() throws IOException {
-        LinkedList<String> history = new LinkedList<>();
-        history = Control.serverInteractor.receiveHistory();
-        for(String msgUnit: history){
-            if(!(history==null)){
-            showArea.setText(msgUnit + "\n");
+                }
             }
-        }
+        });
+        thread.start();
     }
 }

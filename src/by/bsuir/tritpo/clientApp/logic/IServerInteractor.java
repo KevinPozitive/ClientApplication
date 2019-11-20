@@ -3,6 +3,7 @@ package by.bsuir.tritpo.clientApp.logic;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.LinkedList;
+import java.util.List;
 
 public interface IServerInteractor {
     void sendMessage(String message) throws IOException;
@@ -11,5 +12,5 @@ public interface IServerInteractor {
     boolean login(String login, String password) throws IOException;
     String receiveMessage(String message) throws IOException;
     LinkedList<String> receiveNames(String names) throws IOException;
-    LinkedList<String> receiveHistory() throws IOException;
+    List<String> getMessages() throws IOException;
 }
