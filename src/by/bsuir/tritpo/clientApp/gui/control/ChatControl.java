@@ -42,19 +42,15 @@ public class ChatControl extends Control{
     private Button sendButton;
 
     @FXML
-    void initialize() throws IOException, InterruptedException {
-       // showHistory();
-        sendButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    if(!textField.getText().equals("")) {
-                        Control.serverInteractor.sendMessage(textField.getText());
-                        textField.clear();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+    void initialize() {
+        sendButton.setOnAction(event -> {
+            try {
+                if(!textField.getText().equals("")) {
+                    Control.serverInteractor.sendMessage(textField.getText());
+                    textField.clear();
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
         Control.serverInteractor.startConversation();
@@ -94,9 +90,8 @@ public class ChatControl extends Control{
                     }
 //                    for(String user:users){
 //                        System.out.println(user);
-//                        //listView.appendText(user+"\n");
+//
 //                    }
-
                 }
             }
         });

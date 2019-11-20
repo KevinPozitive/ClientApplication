@@ -21,11 +21,8 @@ public class ServerInteractorImpl implements IServerInteractor {
 
     public ServerInteractorImpl(Socket socket) throws IOException {
         this.socket = socket;
-        System.out.println(socket);
         out = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream()));
         in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-        System.out.println(in);
-        System.out.println(out);
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -39,7 +36,6 @@ public class ServerInteractorImpl implements IServerInteractor {
                     String msg;
                     try {
                         msg = in.readLine();
-                        System.out.println(msg);
                         String[] message = msg.split("~");
                         switch (message[0]){
                             case "msgHistory":
@@ -96,7 +92,6 @@ public class ServerInteractorImpl implements IServerInteractor {
         out.write("log~"+login+"~"+password+"\n");
         out.flush();
         String str = in.readLine();
-        System.out.println(str);
         if(str.equals("true")){
             return true;
         }
@@ -105,7 +100,6 @@ public class ServerInteractorImpl implements IServerInteractor {
 
     public void startConversation(){
         if(!thread.isAlive()) {
-            System.out.println("OMG");
             thread.start();
         }
     }
@@ -123,7 +117,6 @@ public class ServerInteractorImpl implements IServerInteractor {
 
     public List<String> getMessages(){
         while (thread.getState() != Thread.State.WAITING){
-           // System.out.println("work");
         }
         List retVal = result;
         try{
