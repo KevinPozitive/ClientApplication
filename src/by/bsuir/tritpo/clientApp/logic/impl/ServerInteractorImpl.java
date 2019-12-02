@@ -13,8 +13,8 @@ public class ServerInteractorImpl implements IServerInteractor {
     private Socket socket;
     private BufferedWriter out;
     private BufferedReader in;
-    private List<String> result;
-    private List<String> onlineUsers;
+    private List<String> messages;
+    private List<String> users;
     private Thread thread;
     private int index = 0;
 
@@ -29,36 +29,61 @@ public class ServerInteractorImpl implements IServerInteractor {
                 try {
                     out.write("msgHistory~"+index+"\n");
                     out.flush();
+                    out.write("onlineUsers\n");
+                    out.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 while (true) {
                     String msg;
+                    String msg2;
+                    if(!socket.isClosed()){
                     try {
                         msg = in.readLine();
+                        msg2 = in.readLine();
+                        if(msg2==null){
+                            try {
+                                synchronized (thread) {
+                                    thread.wait();
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            return;
+                        }
                         String[] message = msg.split("~");
-                        switch (message[0]){
-                            case "msgHistory":
-                                index +=message.length-1;
-                                result = new ArrayList<>();
-                                for(int i = 1; i < message.length; i++){
-                                        result.add(message[i]);
+                        String[] message2 = msg2.split("~");
+                        if (message[0].equals("msgHistory")) {
+                            index += message.length - 1;
+                            messages = new ArrayList<>();
+                            for (int i = 1; i < message.length; i++) {
+                                messages.add(message[i]);
+                            }
+                            try {
+                                synchronized (thread) {
+                                    thread.wait();
                                 }
-                                try{
-                                    synchronized (thread){
-                                        thread.wait();
-                                    }
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if(message2[0].equals("onlineUsers")){
+                            users = new ArrayList<>();
+                            for(int i = 1;i<message2.length;i++){
+                                users.add(message2[i]);
+                            }
+                            try {
+                                synchronized (thread) {
+                                    thread.wait();
                                 }
-                                out.write("msgHistory~"+index+"\n");
-                                out.flush();
-                                break;
-                            case "onlUsers":
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                }
                 }
             }
         });
@@ -72,7 +97,7 @@ public class ServerInteractorImpl implements IServerInteractor {
 
     @Override
     public void exit() throws IOException {
-        out.write("exit" + "\n");
+        out.write("exit\n");
         out.flush();
     }
 
@@ -104,21 +129,16 @@ public class ServerInteractorImpl implements IServerInteractor {
         }
     }
 
-    @Override
-    public List<String> getOnlineUsers() {
-        return null;
-    }
-
     public void endConversation() throws IOException {
         if(thread.isAlive()) {
             thread.interrupt();
         }
     }
-
-    public List<String> getMessages(){
+    @Override
+    public List<String> getOnlineUsers() {
         while (thread.getState() != Thread.State.WAITING){
         }
-        List retVal = result;
+        List retVal = users;
         try{
             synchronized (thread){
                 thread.notify();
@@ -126,6 +146,51 @@ public class ServerInteractorImpl implements IServerInteractor {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        try {
+            if(!socket.isClosed()) {
+                out.write("onlineUsers\n");
+                out.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return retVal;
+    }
+    public List<String> getMessages(){
+        while (thread.getState() != Thread.State.WAITING){
+        }
+        List retVal = messages;
+        try{
+            synchronized (thread){
+                thread.notify();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if(!socket.isClosed()) {
+                out.write("msgHistory~" + index + "\n");
+                out.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return retVal;
+    }
+
+    public void close() throws IOException {
+        try {
+            out.write("exit\n");
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        socket.close();
+        try {
+            in.close();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

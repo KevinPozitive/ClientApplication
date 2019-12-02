@@ -10,7 +10,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
+        ClientConnect connect;
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("../gui/fxml/Login.fxml"));
@@ -18,7 +18,13 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root,800,600));
         primaryStage.minWidthProperty().setValue(810);
         primaryStage.minHeightProperty().setValue(640);
-        new ClientConnect(Configs.ipAddr,Configs.PORT);
+        connect = new ClientConnect(Configs.ipAddr,Configs.PORT);
         primaryStage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        connect.closeConnection();
+        super.stop();
     }
 }

@@ -11,14 +11,12 @@ import java.net.UnknownHostException;
 
 public class ClientConnect {
     private Socket socket;
-    private BufferedReader in;
-    private BufferedWriter out;
+    ServerInteractorImpl sI;
 
-
-    public ClientConnect(String addr, int port){
+    public ClientConnect(String addr, int port) throws IOException {
         try {
             this.socket = new Socket(addr,port);
-            ServerInteractorImpl sI = new ServerInteractorImpl(socket);
+            sI = new ServerInteractorImpl(socket);
             new Control(sI);
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -26,4 +24,14 @@ public class ClientConnect {
             e.printStackTrace();
         }
     }
+    public void closeConnection() {
+        try {
+            sI.close();
+            this.socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

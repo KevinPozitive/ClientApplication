@@ -15,6 +15,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class ChatControl extends Control{
     Thread thread;
@@ -42,7 +44,8 @@ public class ChatControl extends Control{
     private Button sendButton;
 
     @FXML
-    void initialize() {
+    void initialize() throws IOException {
+
         sendButton.setOnAction(event -> {
             try {
                 if(!textField.getText().equals("")) {
@@ -64,6 +67,7 @@ public class ChatControl extends Control{
                     loader.load();
                     Parent root = loader.getRoot();
                     exitButton.getScene().setRoot(root);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -82,19 +86,23 @@ public class ChatControl extends Control{
                     List<String> users = null;
                     try {
                         msg = serverInteractor.getMessages();
+                        users = serverInteractor.getOnlineUsers();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     for(String message:msg){
                         showArea.appendText(message+"\n");
                     }
-//                    for(String user:users){
-//                        System.out.println(user);
-//
-//                    }
+                    listView.clear();
+                    for(String user:users){
+                        listView.appendText(user+"\n");
+                    }
                 }
             }
         });
         thread.start();
     }
+
+
+
 }
